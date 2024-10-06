@@ -68,7 +68,7 @@
             // Loại bỏ dấu và các ký tự đặc biệt trong slug, thay thế khoảng trắng bằng dấu gạch ngang
             customSlug = customSlug.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
             
-            // Loại bỏ tham số sau dấu '?' nếu có
+            // Loại bỏ các tham số sau dấu '?' nếu có
             const cleanURL = originalURL.split('?')[0];
             
             // Kiểm tra xem URL có chứa '/i.' không
