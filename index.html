@@ -43,7 +43,7 @@
 </head>
 <body>
 
-    <h1>Shopee URL B Customizer</h1>
+    <h1>Shopee URL C Customizer</h1>
     
     <div>
         <label for="original-url">Your Shopee URL:</label><br>
@@ -63,17 +63,29 @@
         function generateURL() {
             const originalURL = document.getElementById('original-url').value;
             let customSlug = document.getElementById('custom-slug').value.trim().replace(/\s+/g, '-').toLowerCase();
-
-            // Loại bỏ mọi thứ sau 'vn/' và chỉ giữ lại phần sau 'i.'
-            const slugPattern = /\/i\.(\d+)\.(\d+)/;
+            
+            // Lấy phần URL trước dấu '?' để loại bỏ các tham số không cần thiết
+            const cleanURL = originalURL.split('?')[0];
             let newURL = '';
-
-            if (slugPattern.test(originalURL)) {
-                const matches = originalURL.match(slugPattern);
+            
+            // Xác định URL theo dạng /product/ hoặc /i.
+            const productPattern = /\/product\/(\d+)\/(\d+)/;
+            const slugPattern = /\/i\.(\d+)\.(\d+)/;
+            
+            if (productPattern.test(cleanURL)) {
+                // URL theo dạng /product/
+                const matches = cleanURL.match(productPattern);
+                const sellerID = matches[1];
+                const productID = matches[2];
+                newURL = `https://shopee.vn/${customSlug}-i.${sellerID}.${productID}`;
+            } else if (slugPattern.test(cleanURL)) {
+                // URL theo dạng /i.
+                const matches = cleanURL.match(slugPattern);
                 const sellerID = matches[1];
                 const productID = matches[2];
                 newURL = `https://shopee.vn/${customSlug}-i.${sellerID}.${productID}`;
             } else {
+                // Nếu không khớp với định dạng nào
                 document.getElementById('output').innerHTML = "Invalid Shopee URL. Please try again.";
                 return;
             }
