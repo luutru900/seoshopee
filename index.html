@@ -3,102 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shopee URL Shortener</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-        h1 {
             text-align: center;
-            color: #333;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin-top: 10px;
-            font-weight: bold;
+            padding: 50px;
         }
         input[type="text"] {
+            width: 80%;
             padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 16px;
         }
         button {
-            margin-top: 20px;
-            padding: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
             background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
         }
         button:hover {
             background-color: #218838;
         }
-        .result {
+        .output {
             margin-top: 20px;
-            padding: 10px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-            text-align: center;
+            font-size: 18px;
+            color: #333;
         }
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
+        .output a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .output a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
     <h1>Shopee URL Shortener</h1>
-    <form id="urlForm">
-        <label for="urlInput">Your Shopee URL:</label>
-        <input type="text" id="urlInput" placeholder="Enter your Shopee URL" required>
-        
-        <label for="slugInput">Your Custom Slug:</label>
-        <input type="text" id="slugInput" placeholder="Enter your custom slug" required>
-
-        <button type="submit">Convert</button>
-    </form>
-
-    <div class="result" id="result" style="display: none;">
-        <p>Your shortened URL:</p>
-        <a href="#" id="shortenedUrl" target="_blank"></a>
+    
+    <div>
+        <label for="original-url">Your Shopee URL:</label><br>
+        <input type="text" id="original-url" placeholder="Enter Shopee URL">
     </div>
-</div>
+    
+    <div>
+        <label for="custom-slug">Your Custom Slug:</label><br>
+        <input type="text" id="custom-slug" placeholder="Enter custom slug">
+    </div>
+    
+    <button onclick="generateURL()">Convert</button>
 
-<script>
-    document.getElementById('urlForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const url = document.getElementById('urlInput').value;
-        const slug = document.getElementById('slugInput').value;
-        
-        // Tạo link ngắn gọn
-        let baseUrl = 'https://shopee.vn/';
-        let shortenedUrl = `${baseUrl}${slug}`;
-        
-        document.getElementById('shortenedUrl').textContent = shortenedUrl;
-        document.getElementById('shortenedUrl').href = shortenedUrl;
-        document.getElementById('result').style.display = 'block';
-    });
-</script>
+    <div class="output" id="output"></div>
+
+    <script>
+        function generateURL() {
+            // Get the original URL and custom slug from the user input
+            const originalURL = document.getElementById('original-url').value;
+            const customSlug = document.getElementById('custom-slug').value;
+            
+            // Extract the product ID and seller ID from the original Shopee URL
+            const urlParts = originalURL.split('/product/');
+            if (urlParts.length > 1) {
+                const ids = urlParts[1].split('?')[0]; // Get the part after '/product/' and before '?'
+                
+                // Generate the new shortened URL
+                const newURL = `https://shopee.vn/${customSlug}-i.${ids}`;
+                
+                // Display the shortened URL
+                document.getElementById('output').innerHTML = `Your shortened URL: <a href="${newURL}" target="_blank">${newURL}</a>`;
+            } else {
+                document.getElementById('output').innerHTML = "Invalid Shopee URL. Please try again.";
+            }
+        }
+    </script>
 
 </body>
 </html>
