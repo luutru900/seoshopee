@@ -74,8 +74,8 @@
                 if (urlParts.length > 1) {
                     const ids = urlParts[1].split('?')[0]; // Lấy phần sau '/product/' và trước dấu '?'
                     
-                    // Tạo URL mới
-                    const newURL = `https://shopee.vn/${customSlug}-i.${ids}`;
+                    // Tạo URL mới với dấu chấm (.) thay vì gạch chéo (/)
+                    const newURL = `https://shopee.vn/${customSlug}-i.${ids.replace('/', '.')}`;
                     
                     // Hiển thị URL rút gọn
                     document.getElementById('output').innerHTML = `Your custom URL: <a href="${newURL}" target="_blank">${newURL}</a>`;
@@ -88,8 +88,8 @@
                 if (urlParts.length > 1) {
                     const ids = urlParts[1].split('?')[0]; // Lấy phần sau '/i.' và trước dấu '?'
                     
-                    // Tạo URL mới
-                    const newURL = `https://shopee.vn/${customSlug}-i.${ids}`;
+                    // Tạo URL mới với dấu chấm (.) thay vì gạch chéo (/)
+                    const newURL = `https://shopee.vn/${customSlug}-i.${ids.replace('/', '.')}`;
                     
                     // Hiển thị URL rút gọn
                     document.getElementById('output').innerHTML = `Your custom URL: <a href="${newURL}" target="_blank">${newURL}</a>`;
