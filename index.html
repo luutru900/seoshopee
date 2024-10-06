@@ -43,7 +43,7 @@
 </head>
 <body>
 
-    <h1>Shopee URL Customizer A</h1>
+    <h1>Shopee URL B Customizer</h1>
     
     <div>
         <label for="original-url">Your Shopee URL:</label><br>
@@ -63,22 +63,13 @@
         function generateURL() {
             const originalURL = document.getElementById('original-url').value;
             let customSlug = document.getElementById('custom-slug').value.trim().replace(/\s+/g, '-').toLowerCase();
-            
-            // Lấy phần URL trước dấu '?' để loại bỏ các tham số không cần thiết
-            const cleanURL = originalURL.split('?')[0];
 
-            // Xác định cấu trúc của URL, chỉ lấy ID người bán và ID sản phẩm
-            let newURL = '';
-            const productPattern = /\/product\/(\d+)\/(\d+)/;
+            // Loại bỏ mọi thứ sau 'vn/' và chỉ giữ lại phần sau 'i.'
             const slugPattern = /\/i\.(\d+)\.(\d+)/;
+            let newURL = '';
 
-            if (productPattern.test(cleanURL)) {
-                const matches = cleanURL.match(productPattern);
-                const sellerID = matches[1];
-                const productID = matches[2];
-                newURL = `https://shopee.vn/${customSlug}-i.${sellerID}.${productID}`;
-            } else if (slugPattern.test(cleanURL)) {
-                const matches = cleanURL.match(slugPattern);
+            if (slugPattern.test(originalURL)) {
+                const matches = originalURL.match(slugPattern);
                 const sellerID = matches[1];
                 const productID = matches[2];
                 newURL = `https://shopee.vn/${customSlug}-i.${sellerID}.${productID}`;
