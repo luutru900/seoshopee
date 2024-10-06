@@ -64,27 +64,32 @@
             // Lấy URL Shopee gốc và slug tùy chỉnh
             const originalURL = document.getElementById('original-url').value;
             let customSlug = document.getElementById('custom-slug').value;
-            
+
             // Loại bỏ dấu và các ký tự đặc biệt trong slug, thay thế khoảng trắng bằng dấu gạch ngang
             customSlug = customSlug.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
-            
+
             // Loại bỏ các tham số sau dấu '?' nếu có
             const cleanURL = originalURL.split('?')[0];
-            
-            // Kiểm tra xem URL có chứa '/i.' không
-            if (cleanURL.includes('/i.')) {
+
+            // Kiểm tra URL chứa "/product/" hoặc "/i."
+            let newURL = "";
+            if (cleanURL.includes('/product/')) {
+                const urlParts = cleanURL.split('/product/');
+                if (urlParts.length > 1) {
+                    const ids = urlParts[1].replace('/', '.');
+                    newURL = `https://shopee.vn/${customSlug}-i.${ids}`;
+                }
+            } else if (cleanURL.includes('/i.')) {
                 const urlParts = cleanURL.split('/i.');
                 if (urlParts.length > 1) {
-                    const ids = urlParts[1]; // Lấy phần sau '/i.'
-                    
-                    // Tạo URL mới với dấu chấm (.) thay vì gạch chéo (/)
-                    const newURL = `https://shopee.vn/${customSlug}-i.${ids}`;
-                    
-                    // Hiển thị URL rút gọn
-                    document.getElementById('output').innerHTML = `Your custom URL: <a href="${newURL}" target="_blank">${newURL}</a>`;
-                } else {
-                    document.getElementById('output').innerHTML = "Invalid Shopee URL. Please try again.";
+                    const ids = urlParts[1];
+                    newURL = `https://shopee.vn/${customSlug}-i.${ids}`;
                 }
+            } 
+
+            // Hiển thị URL rút gọn hoặc thông báo lỗi
+            if (newURL) {
+                document.getElementById('output').innerHTML = `Your custom URL: <a href="${newURL}" target="_blank">${newURL}</a>`;
             } else {
                 document.getElementById('output').innerHTML = "Invalid Shopee URL. Please try again.";
             }
