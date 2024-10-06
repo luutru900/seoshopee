@@ -3,90 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SEO Shopee Link Converter</title>
+    <title>Shopee URL Customizer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f5f5f5;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-        h1 {
-            color: #333;
+            padding: 50px;
         }
         input[type="text"] {
-            width: calc(100% - 22px);
+            width: 80%;
             padding: 10px;
             margin: 10px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+            font-size: 16px;
         }
         button {
             padding: 10px 20px;
+            font-size: 16px;
             background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
         }
         button:hover {
             background-color: #218838;
         }
+        .output {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .output a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .output a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Convert Shopee Link</h1>
-    <form id="linkForm">
-        <input type="text" id="originalLink" placeholder="Your Shopee Link" required><br>
-        <input type="text" id="slug" placeholder="Your Slug (SEO Keyword)" required><br>
-        <button type="submit">Convert</button>
-    </form>
-</div>
+    <h1>Shopee URL Customizer</h1>
+    
+    <div>
+        <label for="original-url">Your Shopee URL:</label><br>
+        <input type="text" id="original-url" placeholder="Enter Shopee URL">
+    </div>
+    
+    <div>
+        <label for="custom-slug">Your Custom Slug:</label><br>
+        <input type="text" id="custom-slug" placeholder="Enter custom slug">
+    </div>
+    
+    <button onclick="generateURL()">Generate Custom URL</button>
 
-<script>
-    document.getElementById('linkForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+    <div class="output" id="output"></div>
 
-        // Lấy link gốc và slug từ người dùng
-        var originalLink = document.getElementById('originalLink').value;
-        var slug = document.getElementById('slug').value;
-
-        // Kiểm tra nếu link gốc là link Shopee hợp lệ
-        if (!originalLink.includes('shopee.vn')) {
-            alert('Vui lòng nhập link Shopee hợp lệ.');
-            return;
+    <script>
+        function generateURL() {
+            // Lấy URL Shopee gốc và slug tùy chỉnh
+            const originalURL = document.getElementById('original-url').value;
+            let customSlug = document.getElementById('custom-slug').value;
+            
+            // Loại bỏ dấu và các ký tự đặc biệt trong slug, thay thế khoảng trắng bằng dấu gạch ngang
+            customSlug = customSlug.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '-').toLowerCase();
+            
+            // Lấy product ID và seller ID từ URL Shopee gốc
+            const urlParts = originalURL.split('/i.');
+            if (urlParts.length > 1) {
+                const ids = urlParts[1].split('?')[0]; // Lấy phần sau '/i.' và trước dấu '?'
+                
+                // Tạo URL mới
+                const newURL = `https://shopee.vn/${customSlug}-i.${ids}`;
+                
+                // Hiển thị URL rút gọn
+                document.getElementById('output').innerHTML = `Your custom URL: <a href="${newURL}" target="_blank">${newURL}</a>`;
+            } else {
+                document.getElementById('output').innerHTML = "Invalid Shopee URL. Please try again.";
+            }
         }
-
-        // Tách phần trước và sau dấu hỏi chấm
-        var parts = originalLink.split("?");
-        var baseUrl = parts[0];  // Phần trước ?
-        var queryParams = parts[1];  // Phần sau ?
-
-        // Tách phần ID cửa hàng và sản phẩm ra từ URL
-        var urlSegments = baseUrl.split("/");
-        var storeProductID = urlSegments.slice(-2).join("/");  // ID cửa hàng và sản phẩm
-
-        // Tạo link mới với slug tùy chỉnh
-        var newLink = `https://shopee.vn/${slug}/${storeProductID}?${queryParams}`;
-
-        // Chuyển hướng người dùng đến URL mới
-        window.location.href = newLink;
-    });
-</script>
+    </script>
 
 </body>
 </html>
